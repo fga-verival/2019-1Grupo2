@@ -1,5 +1,8 @@
+import simplejson
+from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse
+from django.views.generic import ListView, DetailView, CreateView, View
 
 from TransactionalFunctions.models import TransactionalFunction
 from TransactionalFunctions.forms import TransactionalFunctionForm
@@ -35,6 +38,7 @@ class TransactionList(ListView):
         context = super().get_context_data(**kwargs)
 
         context['transactions_by_type'] = self.get_by_transactions_type()
+        context['base_request_url'] = reverse('list');
 
         return context
 
@@ -45,3 +49,31 @@ class TransactionCreate(CreateView):
     form_class = TransactionalFunctionForm
     template_name = 'TransactionalFunctions/createview.html'
 
+
+class FindValuesView(View):
+
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+
+        alr = self.kwargs['alr']
+        der = self.kwargs['der']
+        type = self.kwargs['type']
+
+        mock_transaction = TransactionalFunction(
+            name="mock",
+            counter_name="mock",
+            functionality_type=type,
+            ALR_aumount=alr,
+            DER_aumount=der,
+            date='01/01/2000'
+        )
+
+        data = {
+            'functions_points': mock_transaction.function_points_aumount,
+            'complexity': mock_transaction.transactional_complexity
+        }
+
+        data = simplejson.dumps(data)
+
+        return HttpResponse(data, content_type='application/json')

@@ -33,11 +33,13 @@
 
     <script>
 
-        window.onload = function () { setup(); }
+        window.onload = function () { setup(); };
+
+        const base_url = "{{ base_request_url }}";
 
         function build_complexity_text(val) {
 
-            text = "Complexidade da Função Transacional: "
+            text = "Complexidade da Função Transacional: ";
 
             if (val === null){
                 return text + "----"
@@ -74,7 +76,11 @@
             return document.getElementById("id_DER_aumount");
         }
 
-        function inputs_chaged() {
+        function get_type_input(){
+            return document.getElementById("id_functionality_type");
+        }
+
+        function inputs_changed() {
 
             let alr_input = get_alr_input();
             let alr_val = parseInt(alr_input.value);
@@ -82,7 +88,10 @@
             let der_input = get_der_input();
             let der_val = parseInt(der_input.value);
 
-            if(isNaN(der_val) || der_val < 1 || isNaN(alr_val) || alr_val < 0){
+            let type_sel = get_type_input();
+            let type_val = parseInt(type_sel.value);
+
+            if(isNaN(der_val) || der_val < 1 || isNaN(alr_val) || alr_val < 0 || isNaN(type_val)){
 
                 get_complecity_text().innerText = build_complexity_text(null);
                 get_functions_points_text().innerText = build_function_points_text(null);
@@ -93,7 +102,19 @@
             get_complecity_text().innerText = build_complexity_text(12);
             get_functions_points_text().innerText = build_function_points_text(12);
 
-            
+            fetch(base_url + '/findValues/' + type_val + '/' + der_val + '/' + alr_val)
+              .then(response => {
+                return response.json()
+              })
+              .then(data => {
+                // Work with JSON data here
+                console.log(data);
+                get_complecity_text().innerText = build_complexity_text(data.complexity);
+                get_functions_points_text().innerText = build_function_points_text(data.functions_points);
+              })
+              .catch(err => {
+                console.log(err);
+              })
 
         }
 
@@ -101,8 +122,9 @@
             //id_ALR_aumount
             //id_DER_aumount
 
-            get_alr_input().addEventListener('change', inputs_chaged);
-            get_der_input().addEventListener('change', inputs_chaged);
+            get_alr_input().addEventListener('change', inputs_changed);
+            get_der_input().addEventListener('change', inputs_changed);
+            get_type_input().addEventListener('change', inputs_changed);
 
         }
 
