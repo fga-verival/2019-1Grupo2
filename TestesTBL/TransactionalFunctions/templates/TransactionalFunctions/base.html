@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>{% block title %}Testes{%  endblock title %}</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+</head>
+<body>
+
+    <div>
+        <a href="{% url 'list' %}">
+          Lista
+        </a>
+        <a href="{% url 'create' %}">
+          Cadastrar
+        </a>
+    </div>
+
+
+    {% block content %}
+    
+    {% endblock content %}
+    
+</body>
+</html>
