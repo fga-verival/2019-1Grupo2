@@ -6,10 +6,42 @@
 
 {% block content %}
 
+    <br>
+    <br>
+
+    <label for="id_functionality_type"> Filtrar por Tipo</label>
+    <select name="functionality_type" id="id_functionality_type" onchange="filter()">
+      <option value="" selected="">---------</option>
+    
+      <option value="EE">EE</option>
+    
+      <option value="CE">CE</option>
+    
+      <option value="SE">SE</option>
+    
+    </select>
+
+
+    <label for="id_complexity_select"> Filtrar por Complexidade</label>
+    <select name="complexity_select" id="id_complexity_select" onchange="filter()">
+      <option value="" selected="">---------</option>
+
+      <option value="BAIXA">Baixa</option>
+
+      <option value="MEDIA">Media</option>
+
+      <option value="ALTA">Alta</option>
+
+    </select>
+
+    <br>
+    <br>
+    <br>
+
     <table id="table">
 
         <tr>
-            <th onclick="sortTable(0)">Nome</th>
+            <th onclick="sortTable(0)">Nome da Funcionalidade</th>
             <th onclick="sortTable(1)">Tipo da Funcionalidade</th>
             <th onclick="sortTable(2)">Parâmetro 1 (ALR)</th>
             <th onclick="sortTable(3)">Parâmetro 2 (DER)</th>
@@ -127,6 +159,46 @@
             }
         }
         }
+
+        function filter() {
+
+            let complexity_val = document.getElementById("id_complexity_select").value.toUpperCase();
+            let type_val = document.getElementById("id_functionality_type").value.toUpperCase();
+
+            let table = document.getElementById("table");
+            let tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (let i = 1; i < tr.length; i++) {
+
+                let show = true;
+
+                let tds = tr[i].getElementsByTagName("td");
+
+                let type_td = tds[1];
+                let complexity_td = tds[4];
+
+                if (type_val.localeCompare('') !== 0) {
+
+                    let txtValue = type_td.textContent || type_td.innerText;
+
+                    show = txtValue.toUpperCase().localeCompare(type_val) === 0;
+                }
+
+                if (show && complexity_val.localeCompare('') !== 0) {
+                    let txtValue = complexity_td.textContent || complexity_td.innerText;
+
+                    show = txtValue.toUpperCase().localeCompare(complexity_val) === 0;
+                }
+
+                if(show){
+                    tr[i].style.display = "";
+                }else{
+                    tr[i].style.display = "none";
+                }
+
+            }
+      }
     </script>
 {% endblock script %}
 
@@ -141,10 +213,15 @@
         th, td {
           text-align: left;
           padding: 16px;
+          border: 1px solid #ddd;
         }
 
         tr:nth-child(even) {
           background-color: #f2f2f2
+        }
+
+        tr:hover {
+          background-color: #dddddd;
         }
     </style>
 {% endblock css %}
