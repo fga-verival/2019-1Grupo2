@@ -6,18 +6,25 @@
     <title>{% block title %}Testes{%  endblock title %}</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
 
+    {% block script %} {% endblock script %}
+
+
+    {%  block css %}
+    {% endblock css %}
+
 </head>
+
 <body>
 
     <div>
         <a href="{% url 'list' %}">
           Lista
         </a>
+        <br>
         <a href="{% url 'create' %}">
           Cadastrar
         </a>
     </div>
-
 
     {% block content %}
     
