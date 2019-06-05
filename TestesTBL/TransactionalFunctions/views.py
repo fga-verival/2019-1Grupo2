@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from TransactionalFunctions.models import TransactionalFunction
 from TransactionalFunctions.forms import TransactionalFunctionForm
 
-# Create your views here.
+
 class TransactionDetail(DetailView):
 
     model = TransactionalFunction

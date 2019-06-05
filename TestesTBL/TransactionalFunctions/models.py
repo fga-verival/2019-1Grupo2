@@ -15,9 +15,19 @@ class TransactionalFunction(models.Model):
 
     functionality_type = models.IntegerField(verbose_name="Tipo de Funcionalidade", choices=FUNCTIONALITY_TYPE_CHOICES)
 
-    ALR_aumount = models.IntegerField(verbose_name="Parâmetro 1 (ALR)", validators=[MinValueValidator(0)])
+    ALR_aumount = models.IntegerField(
+        verbose_name="Parâmetro 1 (ALR)",
+        validators=[
+            MinValueValidator(0, message='O valor de ALR deve ser maior ou igual a 0')
+        ]
+    )
 
-    DER_aumount = models.IntegerField(verbose_name="Parâmetro 2 (DER)", validators=[MinValueValidator(1)])
+    DER_aumount = models.IntegerField(
+        verbose_name="Parâmetro 2 (DER)",
+        validators=[
+            MinValueValidator(1, message='O valor de DER deve ser maior ou igual a 1')
+        ]
+    )
 
     counter_name = models.CharField(verbose_name="Nome do Contador", max_length=250)
 

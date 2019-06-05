@@ -6,19 +6,111 @@
 
 {% block content %}
 
+    <br>
+    <br>
+    <br>
 
-  <form id="form_to_submit" method="post" enctype="multipart/form-data" action="#menu1">
+    <form id="form_to_submit" method="post" enctype="multipart/form-data" action="#menu1">
 
-    {% csrf_token %}
+        <div class="row float-right mr-2">
+          <button type="submit">Salvar</button>
+        </div>
+
+        {% csrf_token %}
+
+        <div>
+            {{ form.as_p }}
+        </div>
+
+    </form>
 
     <div>
-        {{ form.as_p }}
+        <p id="complexity_text">Complexidade da Função Transacional: </p>
+        <p id="function_points_text">Pontos de Função: </p>
+
     </div>
 
-    <div class="row float-right mr-2">
-      <button type="submit">Salvar</button>
-    </div>
 
-  </form>
+    <script>
+
+        window.onload = function () { setup(); }
+
+        function build_complexity_text(val) {
+
+            text = "Complexidade da Função Transacional: "
+
+            if (val === null){
+                return text + "----"
+            }
+
+            return text + val.toString();
+        }
+
+
+        function build_function_points_text(val) {
+
+            text = "Pontos de Função: ";
+
+            if (val === null){
+                return text + "----"
+            }
+
+            return text + val.toString();
+        }
+
+        function get_complecity_text(){
+            return document.getElementById("complexity_text");
+        }
+
+        function get_functions_points_text(){
+            return  document.getElementById("function_points_text");
+        }
+
+        function get_alr_input() {
+            return document.getElementById("id_ALR_aumount");
+        }
+
+        function get_der_input() {
+            return document.getElementById("id_DER_aumount");
+        }
+
+        function inputs_chaged() {
+
+            let alr_input = get_alr_input();
+            let alr_val = parseInt(alr_input.value);
+
+            let der_input = get_der_input();
+            let der_val = parseInt(der_input.value);
+
+            if(isNaN(der_val) || der_val < 1 || isNaN(alr_val) || alr_val < 0){
+
+                get_complecity_text().innerText = build_complexity_text(null);
+                get_functions_points_text().innerText = build_function_points_text(null);
+
+                return;
+            }
+
+            get_complecity_text().innerText = build_complexity_text(12);
+            get_functions_points_text().innerText = build_function_points_text(12);
+
+            
+
+        }
+
+        function setup() {
+            //id_ALR_aumount
+            //id_DER_aumount
+
+            get_alr_input().addEventListener('change', inputs_chaged);
+            get_der_input().addEventListener('change', inputs_chaged);
+
+        }
+
+
+
+
+    </script>
 
 {% endblock content %}
+
+
