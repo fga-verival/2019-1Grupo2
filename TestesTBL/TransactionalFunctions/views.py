@@ -66,7 +66,7 @@ class FindValuesView(View):
             functionality_type=type,
             ALR_aumount=alr,
             DER_aumount=der,
-            date='01/01/2000'
+            date='2000-01-01'
         )
 
         data = {

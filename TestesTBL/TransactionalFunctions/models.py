@@ -1,11 +1,17 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MinLengthValidator
 from django.urls import reverse_lazy
 
 
 class TransactionalFunction(models.Model):
 
-    name = models.CharField(verbose_name="Nome", max_length=250)
+    name = models.CharField(
+        verbose_name="Nome",
+        max_length=250,
+        validators=[
+            MinLengthValidator(4, message='O nome deve ter pelo menos 3 caracteres')
+        ]
+    )
 
     FUNCTIONALITY_TYPE_CHOICES = (
         (1, 'EE'),
@@ -48,6 +54,12 @@ class TransactionalFunction(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('list')
+
+    def save(self, *args, **kwargs):
+
+        self.full_clean()
+
+        super().save(*args, **kwargs)
 
     def ee_functional_complexity(self):
 
