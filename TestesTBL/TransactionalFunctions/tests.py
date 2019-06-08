@@ -76,3 +76,12 @@ class TestModel(TestCase):
         self.assertEqual(test_field('ALR_aumount', -1), False)
         self.assertEqual(test_field('ALR_aumount', 0), True)
         self.assertEqual(test_field('ALR_aumount', 1), True)
+
+
+    def test_DER_aumount(self):
+
+        self.assertEqual(test_field('DER_aumount', None), False)
+        self.assertEqual(test_field('DER_aumount', -2), False)
+        self.assertEqual(test_field('DER_aumount', -1), False)
+        self.assertEqual(test_field('DER_aumount', 0), False)
+        self.assertEqual(test_field('DER_aumount', 1), True)
