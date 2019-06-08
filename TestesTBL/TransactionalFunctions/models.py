@@ -35,7 +35,13 @@ class TransactionalFunction(models.Model):
         ]
     )
 
-    counter_name = models.CharField(verbose_name="Nome do Contador", max_length=250)
+    counter_name = models.CharField(
+        verbose_name="Nome do Contador",
+        max_length=250,
+        validators=[
+            MinLengthValidator(4, message='O nome do contador deve ter pelo menos 3 caracteres')
+        ]
+    )
 
     date = models.DateField(verbose_name="Data", auto_now=True)
 
@@ -63,7 +69,7 @@ class TransactionalFunction(models.Model):
 
     def ee_functional_complexity(self):
 
-        i = j = -1
+        i = j = None
 
         if 0 <= self.ALR_aumount <= 1:
             i = 0
@@ -83,7 +89,7 @@ class TransactionalFunction(models.Model):
 
     def ce_functional_complexity(self):
 
-        i = j = -1
+        i = j = None
 
         if 0 <= self.ALR_aumount <= 1:
             i = 0
@@ -103,7 +109,7 @@ class TransactionalFunction(models.Model):
 
     def se_functional_complexity(self):
 
-        i = j = -1
+        i = j = None
 
         if 0 <= self.ALR_aumount <= 1:
             i = 0
