@@ -18,7 +18,7 @@ def test_field(field_name, value, generator=None):
         return True
 
     except Exception as e:
-        
+
         return False
 
 
@@ -69,3 +69,10 @@ class TestModel(TestCase):
         self.assertEqual(test_field('functionality_type', 'CE', generate_value_from_display), True)
         self.assertEqual(test_field('functionality_type', 'SE', generate_value_from_display), True)
 
+    def test_ALR_aumount(self):
+
+        self.assertEqual(test_field('ALR_aumount', None), False)
+        self.assertEqual(test_field('ALR_aumount', -2), False)
+        self.assertEqual(test_field('ALR_aumount', -1), False)
+        self.assertEqual(test_field('ALR_aumount', 0), True)
+        self.assertEqual(test_field('ALR_aumount', 1), True)
