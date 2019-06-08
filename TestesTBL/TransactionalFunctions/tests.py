@@ -3,8 +3,26 @@ from django.test import TestCase
 from .models import TransactionalFunction
 
 
-class TestModel(TestCase):
+def test_field(field_name, value, generator=None):
+    try:
 
+        if generator is None:
+            generator = lambda x: x
+
+        args = TestModel.default_args.copy()
+        args[field_name] = generator(value)
+
+        t = TransactionalFunction(**args)
+        t.save()
+
+        return True
+
+    except Exception as e:
+        
+        return False
+
+
+class TestModel(TestCase):
     default_args = {
         'name': "name",
         'functionality_type': 1,
@@ -17,25 +35,37 @@ class TestModel(TestCase):
     def setUp(self) -> None:
         pass
 
-    def testName(self):
 
-        def test_with_n_letters(n):
-            try:
+    def test_name(self):
 
-                args = self.default_args.copy()
-                args['name'] = "a" * n
+        def generate_name_with_n_letters(n):
+            return "a" * n
 
-                t = TransactionalFunction(**args)
-                t.save()
+        self.assertEqual(test_field('name', 0, generate_name_with_n_letters), False)
+        self.assertEqual(test_field('name', 3, generate_name_with_n_letters), False)
+        self.assertEqual(test_field('name', 50, generate_name_with_n_letters), True)
+        self.assertEqual(test_field('name', 100, generate_name_with_n_letters), True)
 
-                return True
+    def test_functionality_type(self):
 
-            except Exception as e:
+        def generate_value_from_display(display):
 
-                return False
+            choice_value = -1
 
-        self.assertEqual(test_with_n_letters(0), False)
-        self.assertEqual(test_with_n_letters(3), False)
-        self.assertEqual(test_with_n_letters(50), True)
-        self.assertEqual(test_with_n_letters(100), True)
+            for index, choice in enumerate(TransactionalFunction.FUNCTIONALITY_TYPE_CHOICES):
+                if choice[1] == display:
+                    choice_value = choice[0]
+                    break
+
+            if choice_value == -1:
+                return display
+            else:
+                return choice_value
+
+        self.assertEqual(test_field('functionality_type', '', generate_value_from_display), False)
+        self.assertEqual(test_field('functionality_type', 'TESTE', generate_value_from_display), False)
+        self.assertEqual(test_field('functionality_type', 'caso', generate_value_from_display), False)
+        self.assertEqual(test_field('functionality_type', 'EE', generate_value_from_display), True)
+        self.assertEqual(test_field('functionality_type', 'CE', generate_value_from_display), True)
+        self.assertEqual(test_field('functionality_type', 'SE', generate_value_from_display), True)
 
